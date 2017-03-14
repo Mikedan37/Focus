@@ -27,6 +27,7 @@ class ViewController: UIViewController {
         }, completion: nil)
         view.backgroundColor = UIColor.gray
             }
+     
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

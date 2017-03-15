@@ -13,13 +13,15 @@ class TimerViewController: UIViewController {
     @IBOutlet var Time: UILabel!
     @IBOutlet var Stop: UIButton!
     @IBOutlet var Start: UIButton!
-    var binaryCount = 0b0000
-    var timer = Timer()
+    var count = 300
     
+
    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimerViewController.update), userInfo: nil, repeats: true)
 
         // Do any additional setup after loading the view.
     }
@@ -30,40 +32,25 @@ class TimerViewController: UIViewController {
     }
     
     @IBAction func Stop(_ sender: Any) {
-        timer.invalidate()
-        binaryCount = 0b0000
-        
-        updateText()
+    
 
     }
     
     @IBAction func Start(_ sender: Any) {
-         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: "countUp", userInfo: nil, repeats: true)
-        RunLoop.current.add(timer, forMode: RunLoopMode.commonModes)
+      
     }
     
-    func countUp() {
+    func update() {
         
-        binaryCount += 0b0001
-        // if the counter reached 16, reset it to 0
-        if (binaryCount == 0b10000) { binaryCount = 0b0000 }
-        updateText()
-        }
-    
-    func updateText() {
-        
-        // Convert from Binary to String
-        var text = String(binaryCount, radix:2)
-        
-        // Pad "0" to the left, to always have 4 binary digits
-        for i in 0..<4 - Int(text)! {
-            text = "0" + text;
+        if(count > 0){
+            let minutes = String(count / 60)
+            let seconds = String(count % 60)
+            Time.text = minutes + ":" + seconds
+            count -= 1
+            
         }
         
-        Time.text = text
-       
     }
-    
   
     /*
     // MARK: - Navigation

@@ -10,18 +10,18 @@ import UIKit
 
 class TimerViewController: UIViewController {
 
+    
     @IBOutlet var Time: UILabel!
     @IBOutlet var Stop: UIButton!
     @IBOutlet var Start: UIButton!
-    var count = 300
+    var seconds = 30
+    var timer = Timer()
     
 
    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        var timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(TimerViewController.update), userInfo: nil, repeats: true)
 
         // Do any additional setup after loading the view.
     }
@@ -32,22 +32,27 @@ class TimerViewController: UIViewController {
     }
     
     @IBAction func Stop(_ sender: Any) {
-    
+    timer.invalidate()
+        Time.text = "30"
+        Start.isHidden = false
+        seconds = 30
 
     }
     
     @IBAction func Start(_ sender: Any) {
       
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(TimerViewController.counter), userInfo: nil, repeats: true)
+            Start.isHidden = true
     }
     
-    func update() {
-        
-        if(count > 0){
-            let minutes = String(count / 60)
-            let seconds = String(count % 60)
-            Time.text = minutes + ":" + seconds
-            count -= 1
-            
+    func counter() {
+        seconds -= 1
+        Time.text = String(seconds)
+        if (seconds == 0){
+            timer.invalidate()
+            Time.text = "30"
+            seconds = 30
+            Start.isHidden = false
         }
         
     }

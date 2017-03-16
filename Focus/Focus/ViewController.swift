@@ -10,23 +10,69 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var longhand = UIView()
-    var shorthand = UIView()
+    @IBOutlet var time: UILabel!
+    var timer = Timer()
+    var minutes: Int = 0
+    var seconds: Int = 0
+    var fractions: Int = 0
+    var hours: Int = 0
+    var timestring = ""
+    var timerison = false
+    
+    @IBAction func button(_ sender: UIButton) {
+        
+        if timerison == false{
+             timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(ViewController.update), userInfo: nil, repeats: true)
+          timer.fire()
+            
+        }
+        if timerison == true{
+            timer.invalidate()
+            timerison = false
+        }
+        timerison = true
+    }
+
+    
+    func update(){
+        
+        fractions += 1
+        if fractions == 100{
+            
+            seconds += 1
+            fractions = 0
+        }
+        
+        if seconds == 60{
+            
+            minutes += 1
+            seconds = 0
+        }
+        
+        if minutes == 60{
+            
+            hours += 1
+            minutes = 0
+        }
+        
+        
+        
+        let fractionsString = fractions > 9 ? "\(fractions)" : "0\(fractions)"
+        let secondsString = seconds > 9 ? "\(seconds)" : "0\(seconds)"
+        let minutesString = minutes > 9 ? "\(minutes)" : "0\(minutes)"
+        let hoursString = hours > 9 ? "\(hours)" : "0\(hours)"
+        let timestring = "\(hoursString):\(minutesString):\(secondsString).\(fractionsString)"
+        time.text = timestring
+    }
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
+        time.text = "0:00:00.00"
        
-        longhand.frame = CGRect(x: 200 , y: 200 , width: 4 , height: 100 )
-        longhand.backgroundColor = UIColor.red
-        UIView.animate(withDuration: 3, delay: 1, options: [UIViewAnimationOptions.curveLinear, UIViewAnimationOptions.allowUserInteraction,UIViewAnimationOptions.autoreverse,UIViewAnimationOptions.transitionCurlDown], animations: {
-            self.longhand.backgroundColor = UIColor.red
-            self.longhand.frame = CGRect(x: 200, y: 400 , width: 50, height: 150)
-            self.view.addSubview(self.longhand)
-
-        }, completion: nil)
-        view.backgroundColor = UIColor.gray
-            }
+    }
      
 
     override func didReceiveMemoryWarning() {
